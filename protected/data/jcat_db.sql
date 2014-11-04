@@ -7,7 +7,7 @@
 #
 # Адрес: 127.0.0.1 (MySQL 5.5.40-0+wheezy1)
 # Схема: jcat
-# Время создания: 2014-11-04 14:05:06 +0000
+# Время создания: 2014-11-04 14:24:29 +0000
 # ************************************************************
 
 
@@ -45,18 +45,6 @@ CREATE TABLE `location` (
   CONSTRAINT `FK_location_realty_id` FOREIGN KEY (`realty_id`) REFERENCES `realty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Адреса недвижимости';
 
-LOCK TABLES `location` WRITE;
-/*!40000 ALTER TABLE `location` DISABLE KEYS */;
-
-INSERT INTO `location` (`id`, `realty_id`, `country`, `region`, `district`, `locality_name`, `sub_locality_name`, `non_admin_sub_locality`, `address`, `direction`, `distance`, `latitude`, `longitude`, `railway_station`)
-VALUES
-	(50,50,'Россия','Московская область','Чеховский р-н','Молоди','','','','Симферопольское шоссе','36','','',''),
-	(51,51,'Россия','Московская область','','Балашиха','','','Тюльпановая улица, 47','Носовихинское шоссе','14','','',''),
-	(52,52,'Россия','Московская область','Можайский р-н','Власово','','','','Минское шоссе','90','','',''),
-	(53,53,'Россия','Москва','','Москва','Москворечье-Сабурово','','Пролетарский проспект, 17, 1','','','','','');
-
-/*!40000 ALTER TABLE `location` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Дамп таблицы metro
@@ -75,15 +63,6 @@ CREATE TABLE `metro` (
   CONSTRAINT `FK_metro_location_id` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Информация о метро';
 
-LOCK TABLES `metro` WRITE;
-/*!40000 ALTER TABLE `metro` DISABLE KEYS */;
-
-INSERT INTO `metro` (`id`, `location_id`, `name`, `time_on_transport`, `time_on_foot`)
-VALUES
-	(11,53,'Кантемировская',NULL,7);
-
-/*!40000 ALTER TABLE `metro` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Дамп таблицы realty
@@ -105,18 +84,6 @@ CREATE TABLE `realty` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Объявления о недвижимости';
 
-LOCK TABLES `realty` WRITE;
-/*!40000 ALTER TABLE `realty` DISABLE KEYS */;
-
-INSERT INTO `realty` (`id`, `type`, `property_type`, `category`, `url`, `creation_date`, `last_update_date`, `expire_date`, `payed_adv`, `manually_added`)
-VALUES
-	(50,'sale','living','house','http://realty.jcat.ru/758b3bbc/','2014-02-18 12:06:24','2014-02-18 12:06:24','2014-02-19 12:06:24',1,1),
-	(51,'rent','living','cottage','http://realty.jcat.ru/89a3cd6b/','2014-02-18 12:06:24','2014-02-18 12:06:24','2014-02-19 12:06:24',1,1),
-	(52,'sale','living','lot','http://realty.jcat.ru/51516f4e/','2014-02-18 12:06:24','2014-02-18 12:06:24','2014-02-19 12:06:24',1,1),
-	(53,'sale','living','flat','http://realty.jcat.ru/5b0a372d/','2014-02-18 12:06:24','2014-02-18 12:06:24','2014-02-19 12:06:24',1,1);
-
-/*!40000 ALTER TABLE `realty` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Дамп таблицы sales_agent
@@ -140,18 +107,6 @@ CREATE TABLE `sales_agent` (
   CONSTRAINT `FK_sales_agent_realty_id` FOREIGN KEY (`realty_id`) REFERENCES `realty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Информация о продавцах';
 
-LOCK TABLES `sales_agent` WRITE;
-/*!40000 ALTER TABLE `sales_agent` DISABLE KEYS */;
-
-INSERT INTO `sales_agent` (`id`, `realty_id`, `name`, `category`, `organization`, `agency_id`, `url`, `phone`, `email`, `partner`)
-VALUES
-	(50,50,'Svetlana Chekaldina','owner','',NULL,'http://Svetagent.ru','+7 (916) 1300100','Cheksvetik1@yandex.ru',''),
-	(51,51,'татьяна','owner','',NULL,'http://kottegi.ru','+7 (925) 7715393','arenda@kottegi.ru',''),
-	(52,52,'Станислав','agency','Полезная земля',NULL,'http://www.polzem.ru','+7 (495) 2200208','info@polzem.ru',''),
-	(53,53,'Галина Афанасьевна','agency','Агентство недвижимости &quot;Гостиный Двор&quot;',NULL,'http://www.gost-dvor.ru/','+7 (925) 5894008','9255894008@mail.ru','');
-
-/*!40000 ALTER TABLE `sales_agent` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 
