@@ -31,7 +31,7 @@ class RealtyCommand extends CConsoleCommand {
         while ($reader->name === 'offer')
         {
 
-            # объект SimpleXMLElement соответствующий одному предложению
+            # объект SimpleXMLElement, соответствующий одному предложению
             $node = new SimpleXMLElement($reader->readOuterXml());
 
             # внутренний id предложения
@@ -40,32 +40,16 @@ class RealtyCommand extends CConsoleCommand {
             /**
              * Работа с предложением
              */
-            # ищем существующее предложение
-            if($offerId > 0){
-                $realtyModel = Realty::model()->findByPk($offerId);
-            }
-            # если не нашли или $offerId <= 0, создаем новую модель
-            if(!isset($realtyModel) || !$realtyModel)
-                $realtyModel = new Realty();
-
-            # заполняем свойства модели
+            # создаем модель
+            $realtyModel = new Realty();
+            # заполняем свойства модели из XML
             $realtyModel->setXmlAttributes($node);
 
             /**
              * Работа с местоположением
              */
-            # если создавали новую запись о предложении,
-            # то и запись о местоположении тоже новая
-            if($realtyModel->isNewRecord){
-                $locationModel = new Location('import');
-            }
-            # в противном случае должна быть запись
-            else{
-                $locationModel = Location::model()->findByAttributes([
-                    'realty_id' => $realtyModel->id
-                ]);
-            }
-
+            # создаем модель
+            $locationModel = new Location('import');
             # заполняем данные из XML
             $locationModel->setXMLAttributes($node->location);
 
@@ -73,37 +57,20 @@ class RealtyCommand extends CConsoleCommand {
             /**
              * Работа с метро
              */
-            # метро (связь 1 к 1 к location)
             # сведения о метро не обязательные
             if($node->location->metro && $node->location->metro->name->__toString() !== ''){
-                if($locationModel->isNewRecord){
-                    # если запись об адресе была новая, то и о метро запись тоже новая
-                    $metroModel = new Metro('import');
-                }
-                else{
-                    # в противном случае попробуем найти существующую запись
-                    $metroModel = Metro::model()->findByAttributes([
-                        'location_id' => $locationModel->id
-                    ]);
-                    # если не нашли существующую запись, создаем новую
-                    if($metroModel === null)
-                        $metroModel = new Metro();
-                }
-
+                # создаем модель
+                $metroModel = new Metro('import');
+                # заполняем данные из XML
                 $metroModel->setXmlAttributes($node->location->metro);
             }
 
             /**
              * Работа с агентом
              */
-            if($realtyModel->isNewRecord){
-                $agentModel = new SalesAgent('import');
-            }
-            else{
-                $agentModel = SalesAgent::model()->findByAttributes([
-                    'realty_id' => $realtyModel->id
-                ]);
-            }
+            # создаем модель
+            $agentModel = new SalesAgent('import');
+            # заполняем данные из XML
             $agentModel->setXmlAttributes($node->{'sales-agent'});
 
 
@@ -151,8 +118,11 @@ class RealtyCommand extends CConsoleCommand {
             }
             # сохраняем данные
             else{
+
+                # false - сохранение без предварительной валидации
                 $realtyModel->save(false);
 
+                # перед сохранение заполняем привязку к $realtyModel
                 $locationModel->realty_id = $realtyModel->id;
                 $locationModel->save(false);
 
@@ -170,8 +140,6 @@ class RealtyCommand extends CConsoleCommand {
 
             $reader->next('offer');
         }
-
-
 
         # код возарата (0 - успешно, остальное - код ошибки)
         return $this->errorCnt;
