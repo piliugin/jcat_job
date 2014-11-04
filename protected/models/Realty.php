@@ -42,7 +42,7 @@ class Realty extends CActiveRecord
 			['payed_adv, manually_added', 'in', 'range'=>[0,1]],
 			['property_type', 'in', 'range'=>['living']],
 			['category', 'in', 'range'=>['flat','room','house','lot','cottage']],
-			['url', 'length', 'max'=>255],
+			['url', 'length', 'max'=>2000],
 			['creation_date, last_update_date, expire_date', 'safe']
 		];
 	}
