@@ -43,7 +43,7 @@ class Realty extends CActiveRecord
 			['property_type', 'in', 'range'=>['living']],
 			['category', 'in', 'range'=>['flat','room','house','lot','cottage']],
 			['url', 'length', 'max'=>2000],
-			['creation_date, last_update_date, expire_date', 'safe']
+			['creation_date, last_update_date, expire_date', 'date', 'format'=>'yyyy-MM-dd?HH:mm:ss+HH:mm']
 		];
 	}
 
